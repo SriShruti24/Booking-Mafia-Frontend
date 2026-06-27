@@ -23,8 +23,8 @@ const Navbar = () => {
 
         {/* Links */}
         <div className="flex items-center space-x-6 text-sm text-gray-300">
-          <Link to="/search" className="flex items-center space-x-1 hover:text-accent transition-colors font-medium">
-            <Compass className="h-4 w-4" />
+          <Link to="/search" className="flex items-center space-x-1.5 bg-accent/10 text-accent hover:bg-accent hover:text-slate-950 transition-all border border-accent/25 rounded-full px-4 py-2 text-xs font-black uppercase tracking-wider cursor-pointer">
+            <Compass className="h-3.5 w-3.5" />
             <span>Explore Flights</span>
           </Link>
 

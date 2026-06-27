@@ -27,39 +27,20 @@ const Home = () => {
         </p>
 
         {/* Call to action buttons */}
-        <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+        <div className="flex flex-col sm:flex-row justify-center items-center gap-5">
           <Link
             to="/search"
-            className="bg-accent hover:bg-accent-hover text-primary font-black text-sm tracking-wide rounded-full px-8 py-4 shadow-lg shadow-emerald-500/25 flex items-center space-x-2 transition-all hover:scale-105 active:scale-95"
+            className="bg-gradient-to-r from-accent to-cyan-400 hover:from-emerald-450 hover:to-cyan-300 text-slate-950 font-black text-base tracking-wide rounded-full px-10 py-5 shadow-2xl shadow-cyan-500/20 flex items-center space-x-3 transition-all hover:scale-105 active:scale-95 duration-300 cursor-pointer"
           >
-            <Compass className="h-4 w-4" />
-            <span>Book Tickets Now</span>
+            <Compass className="h-5 w-5 animate-spin" style={{ animationDuration: '6s' }} />
+            <span>Explore Flights & Book Seats</span>
           </Link>
           <Link
             to="/login"
-            className="bg-primary-light border border-gray-700 hover:border-gray-500 text-white font-bold text-sm rounded-full px-8 py-4 transition-colors"
+            className="bg-primary-light border border-gray-800 hover:border-gray-600 text-white font-bold text-sm rounded-full px-8 py-4.5 transition-colors cursor-pointer"
           >
-            Manage Trips
+            Manage Your Trips
           </Link>
-        </div>
-
-        {/* Key Features */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-16 max-w-3xl mx-auto text-left">
-          <div className="glass-card rounded-2xl p-5 space-y-2">
-            <Zap className="h-6 w-6 text-accent" />
-            <h4 className="font-bold text-white text-sm">Concurrent Seat Holds</h4>
-            <p className="text-xs text-gray-500 leading-normal">Our system uses row-level database locking to secure seat allocations for 2 minutes instantaneously.</p>
-          </div>
-          <div className="glass-card rounded-2xl p-5 space-y-2">
-            <ShieldCheck className="h-6 w-6 text-accent" />
-            <h4 className="font-bold text-white text-sm">Real-time Layout updates</h4>
-            <p className="text-xs text-gray-500 leading-normal">Receive WebSocket-based seat maps showing held, booked, and available cabins immediately.</p>
-          </div>
-          <div className="glass-card rounded-2xl p-5 space-y-2">
-            <Plane className="h-6 w-6 text-accent" />
-            <h4 className="font-bold text-white text-sm">Premium Multipliers</h4>
-            <p className="text-xs text-gray-500 leading-normal">Premium class adjustments automatically computed for window, aisle, or extra legroom options.</p>
-          </div>
         </div>
       </div>
     </div>
