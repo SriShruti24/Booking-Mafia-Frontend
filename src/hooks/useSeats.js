@@ -18,9 +18,7 @@ import {
   clearSelectedSeats,
   clearHoldDetails,
   decrementTimer,
-  updateSeatRealtime,
 } from '../features/seats/seatSlice';
-import { initiateSocket, disconnectSocket, subscribeToSeatUpdates } from '../socket/socket';
 
 export const useSeats = (flightId) => {
   const dispatch = useDispatch();
@@ -57,18 +55,16 @@ export const useSeats = (flightId) => {
     }
   }, [dispatch, flightId, selectedSeatNumbers]);
 
-  // Handle Realtime Socket Connection
+  // Handle 2-second short interval polling for seat synchronization
   useEffect(() => {
     if (!flightId) return;
 
-    initiateSocket(flightId);
-
-    subscribeToSeatUpdates((update) => {
-      dispatch(updateSeatRealtime(update));
-    });
+    const pollInterval = setInterval(() => {
+      dispatch(fetchSeatsThunk(flightId));
+    }, 2000);
 
     return () => {
-      disconnectSocket(flightId);
+      clearInterval(pollInterval);
     };
   }, [dispatch, flightId]);
 

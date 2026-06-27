@@ -51,15 +51,6 @@ const seatSlice = createSlice({
       if (state.timerSeconds !== null && state.timerSeconds > 0) {
         state.timerSeconds -= 1;
       }
-    },
-    updateSeatRealtime: (state, action) => {
-      const { seatNumbers, status, holdUntil, holdBy } = action.payload;
-      state.seats = state.seats.map(seat => {
-        if (seatNumbers.includes(seat.seatNumber)) {
-          return { ...seat, status, holdUntil, holdBy };
-        }
-        return seat;
-      });
     }
   },
 });
@@ -73,7 +64,6 @@ export const {
   setHoldDetails,
   clearHoldDetails,
   setTimer,
-  decrementTimer,
-  updateSeatRealtime
+  decrementTimer
 } = seatSlice.actions;
 export default seatSlice.reducer;
