@@ -1,0 +1,4 @@
+/* CSS Variables definitions */
+:root {
+  --theme-transition-duration: 300ms;
+}
