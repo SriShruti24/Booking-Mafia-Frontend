@@ -46,9 +46,10 @@ const FlightCard = ({ flight, onSelect }) => {
           <Armchair className="h-3.5 w-3.5 text-gray-500" />
           <span>Flight: {flight.flightNumber}</span>
         </p>
-        <div className="mt-3 flex items-baseline space-x-1">
-          <span className="text-xs font-bold text-gray-500">Base Fare:</span>
+        <div className="mt-3">
+          <p className="text-xs text-gray-500 font-bold mb-0.5">Economy from</p>
           <h3 className="text-3xl font-display font-black text-white">{formatCurrency(flight.price)}</h3>
+          <p className="text-[10px] text-gray-600 mt-0.5">Final price varies by seat class</p>
         </div>
         <Button onClick={() => onSelect(flight.id)} variant="primary" className="mt-4 w-full md:w-auto px-6 py-2.5 flex items-center justify-center space-x-2">
           <span>Book Seats</span>
