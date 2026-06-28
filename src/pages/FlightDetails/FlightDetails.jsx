@@ -51,9 +51,9 @@ const FlightDetails = () => {
           <p className="text-xs text-gray-500">Boarding Gate: {selectedFlight.boardingGate || 'A1'}</p>
         </div>
         <div className="text-center md:text-right space-y-1">
-          <p className="text-xs text-gray-500 font-bold uppercase">Ticket Base Price</p>
+          <p className="text-xs text-gray-500 font-bold uppercase">Economy Base Fare</p>
           <h3 className="font-display font-black text-4xl text-accent">{formatCurrency(selectedFlight.price)}</h3>
-          <p className="text-[10px] text-gray-400">Per Passenger (Base Seat)</p>
+          <p className="text-[10px] text-gray-400">from / per passenger · varies by seat class</p>
         </div>
       </div>
 
@@ -115,7 +115,7 @@ const FlightDetails = () => {
               <p>Premium options for window, aisle, or exit-row seats can be configured in the next step.</p>
             </div>
             <Button
-              onClick={() => navigate(`/flights/${selectedFlight.id}/seats`)}
+              onClick={() => navigate(`/flights/${id}/seats`)}
               className="w-full"
               variant="primary"
             >

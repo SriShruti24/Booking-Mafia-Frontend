@@ -107,8 +107,18 @@ const Payment = () => {
                 <span className="font-bold text-accent">{getSeatNumbersStr()}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-500 font-bold uppercase text-xs">Base Price:</span>
-                <span>{formatCurrency(selectedFlight?.price || 100)} x {currentBooking?.noOfSeats || 1}</span>
+                <span className="text-gray-500 font-bold uppercase text-xs">No. of Seats:</span>
+                <span>{currentBooking?.noOfSeats || 1} passenger(s)</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-500 font-bold uppercase text-xs">Base Fare (Economy):</span>
+                <span>{formatCurrency(selectedFlight?.price || 0)}</span>
+              </div>
+              <div className="flex justify-between text-accent">
+                <span className="font-bold uppercase text-xs">Class & Type Adjustments:</span>
+                <span className="font-semibold">
+                  +{formatCurrency(Math.max(0, (currentBooking?.totalCost || 0) - (selectedFlight?.price || 0) * (currentBooking?.noOfSeats || 1)))}
+                </span>
               </div>
             </div>
 

@@ -14,15 +14,17 @@ const PassengerDetails = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { selectedFlight } = useFlights();
-  const { selectedSeatNumbers, timerSeconds, seats } = useSeats(id);
+  const { selectedSeatNumbers, holdDetails, timerSeconds, seats } = useSeats(id);
   const { createBooking, loading, error, currentBooking } = useBooking();
 
   useEffect(() => {
-    // If no seats are selected/held, redirect back to seat selection
-    if (selectedSeatNumbers.length === 0) {
+    // Redirect to seats only if there's no active hold AND no seats selected.
+    // Using holdDetails prevents the redirect loop where SeatSelection unmount
+    // clears selectedSeatNumbers before this component has a chance to mount.
+    if (!holdDetails && selectedSeatNumbers.length === 0) {
       navigate(`/flights/${id}/seats`);
     }
-  }, [id, selectedSeatNumbers, navigate]);
+  }, [id, holdDetails, selectedSeatNumbers, navigate]);
 
   const handlePassengerSubmit = async (passengers) => {
     try {
@@ -42,7 +44,7 @@ const PassengerDetails = () => {
 
   const selectedSeatObjects = seats.filter(s => selectedSeatNumbers.includes(s.seatNumber));
   // Fallback if flight data is fetching
-  const basePrice = selectedFlight?.price || 100;
+  const basePrice = selectedFlight?.price || 1400;
   const totalCost = selectedSeatObjects.reduce((acc, s) => acc + Math.round(basePrice * parseFloat(s.fareMultiplier)), 0);
 
   if (loading && !currentBooking) {

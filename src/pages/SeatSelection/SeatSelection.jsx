@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useSeats } from '../../hooks/useSeats';
 import { useAuth } from '../../hooks/useAuth';
@@ -15,6 +15,7 @@ const SeatSelection = () => {
   const navigate = useNavigate();
   const { isAuthenticated, user } = useAuth();
   const { selectedFlight, fetchFlightById } = useFlights();
+  const [holdError, setHoldError] = useState(null);
   const {
     seats,
     selectedSeatNumbers,
@@ -32,9 +33,10 @@ const SeatSelection = () => {
     if (!selectedFlight) {
       fetchFlightById(id);
     }
-    // Clean up selection list on route change
-    return () => resetSeatSelection();
-  }, [id, fetchSeats, fetchFlightById, selectedFlight, resetSeatSelection]);
+    // NOTE: Do NOT clear seat selection on unmount here.
+    // Clearing on unmount causes a redirect loop: SeatSelection unmounts on navigate
+    // → clearSelectedSeats fires → PassengerDetails sees 0 seats → redirects back.
+  }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleSeatClick = (seatNumber) => {
     selectSeat(seatNumber);
@@ -45,12 +47,18 @@ const SeatSelection = () => {
       navigate('/login', { state: { from: `/flights/${id}/seats` } });
       return;
     }
-
+    setHoldError(null);
     try {
       await holdSelectedSeats(user.id);
       navigate(`/flights/${id}/passenger-details`);
     } catch (err) {
-      // Error handled by hook or display standard warning
+      // CONFLICT = another user grabbed the same seat at the same moment.
+      // The thunk already cleared the selection and refreshed the seat map.
+      if (err.conflict || err.message?.toLowerCase().includes('not available')) {
+        setHoldError('⚡ Another user just grabbed that seat at the same time! The map has been refreshed — please select a different seat.');
+      } else {
+        setHoldError(err.message || 'Failed to lock seats. Please try again.');
+      }
     }
   };
 
@@ -75,10 +83,10 @@ const SeatSelection = () => {
         </p>
       </div>
 
-      {error && (
+      {(error || holdError) && (
         <div className="bg-red-500/10 border border-red-500/20 text-red-400 text-sm font-semibold rounded-2xl p-4 flex justify-between items-center">
-          <span>{error}</span>
-          <button onClick={fetchSeats} className="text-accent underline text-xs font-bold flex items-center space-x-1 cursor-pointer">
+          <span>{holdError || error}</span>
+          <button onClick={() => { setHoldError(null); fetchSeats(); }} className="text-accent underline text-xs font-bold flex items-center space-x-1 cursor-pointer">
             <RefreshCw className="h-3.5 w-3.5" />
             <span>Retry</span>
           </button>
@@ -100,6 +108,7 @@ const SeatSelection = () => {
                 selectedSeatNumbers={selectedSeatNumbers}
                 onSeatClick={handleSeatClick}
                 currentUserId={user?.id}
+                basePrice={selectedFlight?.price || 1400}
               />
               <SeatLegend />
             </>
@@ -110,7 +119,7 @@ const SeatSelection = () => {
         <div>
           <SelectedSeatsPanel
             selectedSeats={selectedSeatObjects}
-            basePrice={selectedFlight?.price || 100}
+            basePrice={selectedFlight?.price || 1400}
             onHoldClick={handleHoldClick}
             loading={loading}
           />
