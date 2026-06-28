@@ -12,6 +12,7 @@ import {
   fetchSeatsThunk,
   holdSeatsThunk,
   releaseSeatsThunk,
+  pollSeatsThunk,
 } from '../features/seats/seatThunk';
 import {
   toggleSeatSelection,
@@ -56,11 +57,12 @@ export const useSeats = (flightId) => {
   }, [dispatch, flightId, selectedSeatNumbers]);
 
   // Handle 2-second short interval polling for seat synchronization
+  // Uses pollSeatsThunk (silent) so loading state is never flipped true every 2s
   useEffect(() => {
     if (!flightId) return;
 
     const pollInterval = setInterval(() => {
-      dispatch(fetchSeatsThunk(flightId));
+      dispatch(pollSeatsThunk(flightId));
     }, 2000);
 
     return () => {

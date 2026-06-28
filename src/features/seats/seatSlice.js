@@ -47,6 +47,10 @@ const seatSlice = createSlice({
     setTimer: (state, action) => {
       state.timerSeconds = action.payload;
     },
+    seatsRefresh: (state, action) => {
+      // Silent background poll update — does NOT set loading, so UI isn't disrupted
+      state.seats = action.payload;
+    },
     decrementTimer: (state) => {
       if (state.timerSeconds !== null && state.timerSeconds > 0) {
         state.timerSeconds -= 1;
@@ -59,6 +63,7 @@ export const {
   seatsStart,
   seatsSuccess,
   seatsFailure,
+  seatsRefresh,
   toggleSeatSelection,
   clearSelectedSeats,
   setHoldDetails,

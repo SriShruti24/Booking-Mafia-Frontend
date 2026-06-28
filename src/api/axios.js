@@ -3,6 +3,7 @@ import { API_BASE_URL } from '../utils/constants';
 
 const axiosClient = axios.create({
   baseURL: API_BASE_URL,
+  timeout: 10000, // 10 second timeout — prevents hung requests locking the UI forever
   headers: {
     'Content-Type': 'application/json',
   },
@@ -27,8 +28,12 @@ axiosClient.interceptors.request.use(
 axiosClient.interceptors.response.use(
   (response) => response.data,
   (error) => {
-    const message = error.response?.data?.message || error.response?.data?.error?.explanation || 'Something went wrong';
-    return Promise.reject(new Error(message));
+    const data = error.response?.data;
+    const message = data?.message || data?.error?.explanation || 'Something went wrong';
+    const err = new Error(message);
+    // Preserve the conflict flag so holdSeatsThunk can handle race conditions
+    if (data?.conflict) err.conflict = true;
+    return Promise.reject(err);
   }
 );
 
