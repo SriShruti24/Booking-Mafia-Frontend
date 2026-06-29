@@ -2,35 +2,18 @@ import React from 'react';
 import { formatDate } from '../../../utils/formatDate';
 import { formatCurrency } from '../../../utils/formatCurrency';
 import { formatPNR } from '../../../utils/formatPNR';
-import { Ticket, Calendar, Ban, CheckCircle2, Clock } from 'lucide-react';
+import { Ticket, Ban, CheckCircle2, Clock } from 'lucide-react';
 import Button from '../../common/Button/Button';
 
 const BookingHistory = ({ bookings, onCancel, loading }) => {
   const getStatusBadge = (status) => {
     switch (status) {
       case 'BOOKED':
-        return (
-          <span className="flex items-center space-x-1 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full">
-            <CheckCircle2 className="h-3 w-3" />
-            <span>Booked</span>
-          </span>
-        );
+        return <span className="text-emerald-400 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1"><CheckCircle2 className="h-3 w-3" /> Confirmed</span>;
       case 'CANCELLED':
-        return (
-          <span className="flex items-center space-x-1 bg-rose-500/10 border border-rose-500/30 text-rose-400 text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full">
-            <Ban className="h-3 w-3" />
-            <span>Cancelled</span>
-          </span>
-        );
-      case 'INITIATED':
-      case 'PENDING':
+        return <span className="text-rose-400 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1"><Ban className="h-3 w-3" /> Cancelled</span>;
       default:
-        return (
-          <span className="flex items-center space-x-1 bg-amber-500/10 border border-amber-500/30 text-amber-400 text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full">
-            <Clock className="h-3 w-3 animate-spin" />
-            <span>Pending Payment</span>
-          </span>
-        );
+        return <span className="text-amber-400 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1"><Clock className="h-3 w-3" /> Pending</span>;
     }
   };
 
@@ -40,8 +23,8 @@ const BookingHistory = ({ bookings, onCancel, loading }) => {
       const parsed = typeof booking.seatNumbers === 'string'
         ? JSON.parse(booking.seatNumbers)
         : booking.seatNumbers;
-      return Array.isArray(parsed) ? parsed.join(", ") : 'N/A';
-    } catch (e) {
+      return Array.isArray(parsed) ? parsed.join(', ') : 'N/A';
+    } catch {
       return booking.seatNumbers.toString();
     }
   };
@@ -50,39 +33,36 @@ const BookingHistory = ({ bookings, onCancel, loading }) => {
     return (
       <div className="glass-panel rounded-3xl p-10 text-center text-gray-500 space-y-2">
         <Ticket className="h-10 w-10 mx-auto text-gray-700" />
-        <p className="font-semibold text-sm">No trip bookings found</p>
-        <p className="text-xs text-gray-650">Your ticket reservations will appear here once booked.</p>
+        <p className="font-semibold text-sm">No bookings yet</p>
+        <p className="text-xs text-gray-600">Your trips will appear here once booked.</p>
       </div>
     );
   }
 
   return (
     <div className="space-y-4 w-full">
-      <h3 className="font-display font-bold text-xl text-white">Your Bookings & Trips</h3>
-      
-      <div className="flex flex-col gap-4">
+      <h3 className="font-display font-bold text-xl text-white">Your Trips</h3>
+
+      <div className="flex flex-col gap-3">
         {bookings.map(booking => (
-          <div key={booking.id} className="glass-card rounded-2xl p-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div className="space-y-2">
-              <div className="flex items-center space-x-3">
-                <div>
-                  <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Booking Ref</p>
-                  <h4 className="font-display font-black text-lg text-white tracking-wider">{formatPNR(booking.id)}</h4>
-                </div>
+          <div key={booking.id} className="glass-card rounded-2xl px-5 py-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+
+            {/* Left: PNR + details */}
+            <div className="space-y-1">
+              <div className="flex items-center gap-3">
+                <span className="font-mono font-black text-white text-base tracking-widest">{formatPNR(booking.id)}</span>
                 {getStatusBadge(booking.status)}
               </div>
-              
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-1 text-xs text-gray-400">
-                <p><span className="font-bold text-gray-600 uppercase">Flight No:</span> BM-{booking.flightId}</p>
-                <p><span className="font-bold text-gray-600 uppercase">Seats:</span> {getSeatNumbersStr(booking)}</p>
-                <p><span className="font-bold text-gray-600 uppercase">Cost:</span> {formatCurrency(booking.totalCost)}</p>
-                <p className="flex items-center space-x-1">
-                  <Calendar className="h-3.5 w-3.5 text-gray-500" />
-                  <span>{formatDate(booking.createdAt, true)}</span>
-                </p>
-              </div>
+              <p className="text-xs text-gray-500">
+                Seats: <span className="text-gray-300">{getSeatNumbersStr(booking)}</span>
+                <span className="mx-2">·</span>
+                {formatCurrency(booking.totalCost)}
+                <span className="mx-2">·</span>
+                {formatDate(booking.createdAt, true)}
+              </p>
             </div>
 
+            {/* Right: Cancel */}
             {booking.status !== 'CANCELLED' && (
               <Button
                 onClick={() => onCancel(booking.id)}
@@ -91,7 +71,7 @@ const BookingHistory = ({ bookings, onCancel, loading }) => {
                 className="px-4 py-2 text-xs flex items-center space-x-1.5 shrink-0"
               >
                 <Ban className="h-3.5 w-3.5" />
-                <span>Cancel Booking</span>
+                <span>Cancel</span>
               </Button>
             )}
           </div>
