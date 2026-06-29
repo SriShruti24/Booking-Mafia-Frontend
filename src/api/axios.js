@@ -3,7 +3,7 @@ import { API_BASE_URL } from '../utils/constants';
 
 const axiosClient = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 10000, // 10 second timeout — prevents hung requests locking the UI forever
+  timeout: 90000, // 90 second timeout — accommodates Render free tier cold starts
   headers: {
     'Content-Type': 'application/json',
   },
