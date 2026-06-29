@@ -1,6 +1,7 @@
 import React from 'react';
 import { formatDate } from '../../../utils/formatDate';
 import { formatCurrency } from '../../../utils/formatCurrency';
+import { formatPNR } from '../../../utils/formatPNR';
 import { Ticket, Calendar, Ban, CheckCircle2, Clock } from 'lucide-react';
 import Button from '../../common/Button/Button';
 
@@ -64,12 +65,15 @@ const BookingHistory = ({ bookings, onCancel, loading }) => {
           <div key={booking.id} className="glass-card rounded-2xl p-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div className="space-y-2">
               <div className="flex items-center space-x-3">
-                <h4 className="font-display font-black text-lg text-white">Booking #{booking.id}</h4>
+                <div>
+                  <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Booking Ref</p>
+                  <h4 className="font-display font-black text-lg text-white tracking-wider">{formatPNR(booking.id)}</h4>
+                </div>
                 {getStatusBadge(booking.status)}
               </div>
               
               <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-1 text-xs text-gray-400">
-                <p><span className="font-bold text-gray-600 uppercase">Flight ID:</span> {booking.flightId}</p>
+                <p><span className="font-bold text-gray-600 uppercase">Flight No:</span> BM-{booking.flightId}</p>
                 <p><span className="font-bold text-gray-600 uppercase">Seats:</span> {getSeatNumbersStr(booking)}</p>
                 <p><span className="font-bold text-gray-600 uppercase">Cost:</span> {formatCurrency(booking.totalCost)}</p>
                 <p className="flex items-center space-x-1">
