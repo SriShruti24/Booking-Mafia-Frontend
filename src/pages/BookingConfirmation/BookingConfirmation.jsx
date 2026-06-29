@@ -36,16 +36,16 @@ const BookingConfirmation = () => {
       <div className="glass-panel rounded-3xl p-6 w-full max-w-md text-left space-y-4">
         <h4 className="font-bold text-white text-sm flex items-center space-x-2">
           <Ticket className="h-5 w-5 text-accent" />
-          <span>Ticket Delivery Details</span>
+          <span>E-Ticket Confirmation</span>
         </h4>
         <p className="text-xs text-gray-400 leading-relaxed">
-          An automated flight ticket showing confirmed seat numbers is being queued and sent via our RabbitMQ microservice notifications helper to your registered email profile address.
+          Your booking is confirmed. An e-ticket with your seat details has been sent to your registered email address.
         </p>
         <div className="bg-slate-900 border border-gray-800 rounded-xl p-4 flex items-center space-x-3">
           <Plane className="h-5 w-5 text-accent rotate-45" />
           <div>
-            <p className="text-xs font-bold text-white">Booking Mafia Express</p>
-            <p className="text-[10px] text-gray-500 mt-0.5">Please check your inbox or spam filters in a few minutes.</p>
+            <p className="text-xs font-bold text-white">Booking Mafia Airlines</p>
+            <p className="text-[10px] text-gray-500 mt-0.5">Please check your inbox. Delivery may take a few minutes.</p>
           </div>
         </div>
       </div>

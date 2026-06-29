@@ -15,7 +15,7 @@ const ProfileCard = ({ user }) => {
         </p>
         <p className="text-xs text-accent font-bold flex items-center space-x-1.5">
           <Shield className="h-3.5 w-3.5" />
-          <span>Verified Account (Customer ID: #{user?.id || 'N/A'})</span>
+          <span>Verified Member</span>
         </p>
       </div>
     </div>
