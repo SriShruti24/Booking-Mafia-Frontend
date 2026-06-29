@@ -7,10 +7,11 @@ import Button from '../../common/Button/Button';
 
 const BookingHistory = ({ bookings, onCancel, loading }) => {
   const getStatusBadge = (status) => {
-    switch (status) {
-      case 'BOOKED':
+    const s = (status || '').toLowerCase();
+    switch (s) {
+      case 'booked':
         return <span className="text-emerald-400 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1"><CheckCircle2 className="h-3 w-3" /> Confirmed</span>;
-      case 'CANCELLED':
+      case 'cancelled':
         return <span className="text-rose-400 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1"><Ban className="h-3 w-3" /> Cancelled</span>;
       default:
         return <span className="text-amber-400 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1"><Clock className="h-3 w-3" /> Pending</span>;

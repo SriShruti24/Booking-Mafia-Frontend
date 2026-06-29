@@ -28,6 +28,9 @@ export const makePaymentThunk = (bookingId, totalCost, userId, idempotencyKey) =
   try {
     await bookingApi.makePayment({ bookingId, totalCost, userId }, idempotencyKey);
     dispatch(paymentSuccessAction());
+    // Re-fetch bookings so profile page immediately shows updated 'booked' status
+    const response = await bookingApi.getByUser(userId);
+    dispatch(userBookingsSuccess(response.data || response));
   } catch (error) {
     dispatch(bookingFailure(error.message));
     throw error;
